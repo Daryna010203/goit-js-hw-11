@@ -7,10 +7,18 @@
     <title>Vanilla App Template</title>
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
-  <body>
-  
+  <body> 
 
-   <h1>тук-тук</h1>
+   
+    <section class="gallery-section">
+      <div class="container">
+        <form class="search-form js-search-form">
+          <input class="search-input js-search-input" type="text" name="user_query" required placeholder="Search images..."/>
+          <button class="search-btn" type="submit">Search</button>
+        </form>
+        <ul class="gallery js-gallery"></ul>
+      </div>
+    </section>
 
 
     <script type="module" src="./main.js"></script>
