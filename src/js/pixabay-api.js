@@ -1,14 +1,15 @@
 const BASE_URL = 'https://pixabay.com';
+const keyAPI = '45521287-1fb3911845814b73b6d184262';
 
-export const fetchPhotos = searchQ => {
+export const fetchPhotos = searchedQuery => {
   const urlParams = new URLSearchParams({
-    key: '45521287-1fb3911845814b73b6d184262',
-    q: searchQ,
+    q: searchedQuery,
     image_type: 'photo',
-    orientation: 'horizontal',
+    orientation: 'portrait',
     safesearch: true,
   });
-  fetch(`${BASE_URL}/api/?${urlParams}`).then(response => {
+
+  return fetch(`${BASE_URL}/api/?key=${keyAPI}&${urlParams}`).then(response => {
     if (!response.ok) {
       throw new Error(response.status);
     }
