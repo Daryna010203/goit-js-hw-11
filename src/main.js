@@ -11,7 +11,7 @@ const galleryEl = document.querySelector('.js-gallery');
 const onSearchFormSubmit = event => {
   event.preventDefault();
 
-  const searchedValue = searchFormBtn.elements.user_query.value;
+  const searchedValue = searchFormBtn.elements.user_query.value.trim();
   if (searchedValue === '') {
     iziToast.show({
       message: 'Please enter something to search',
@@ -22,12 +22,13 @@ const onSearchFormSubmit = event => {
       position: 'topRight',
       maxWidth: 432,
     });
+    return;
   }
 
   fetchPhotos(searchedValue)
     .then(data => {
       console.log(data);
-      if (data.hits.total === 0) {
+      if (data.total === 0) {
         iziToast.error({
           message:
             'Sorry, there are no images matching your search query. Please try again!',
@@ -44,12 +45,19 @@ const onSearchFormSubmit = event => {
 
         return;
       }
+      const lightbox = new SimpleLightbox('.gallery a', {
+        captionsData: 'alt',
+        captionDelay: 250,
+        overlayOpacity: 0.9,
+        className: 'modal-container',
+      });
 
       const galleryCardsTemplate = data.hits
         .map(imgDetails => createGalleryCardTemplate(imgDetails))
         .join('');
 
       galleryEl.innerHTML = galleryCardsTemplate;
+      lightbox.refresh();
     })
     .catch(err => {
       console.log(err);
@@ -57,3 +65,10 @@ const onSearchFormSubmit = event => {
 };
 
 searchFormBtn.addEventListener('submit', onSearchFormSubmit);
+
+new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  overlayOpacity: 0.9,
+  className: 'modal-container',
+});
