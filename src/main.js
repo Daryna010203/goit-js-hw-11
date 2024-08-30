@@ -7,11 +7,19 @@ import { fetchPhotos } from './js/pixabay-api';
 
 const searchFormBtn = document.querySelector('.js-search-form');
 const galleryEl = document.querySelector('.js-gallery');
+const loaderEl = document.querySelector('.loader-box');
+const loaderBtn = document.querySelector('.loader-btn');
+
+loaderEl.classList.add('hidden');
+loaderBtn.classList.add('hidden');
 
 const onSearchFormSubmit = event => {
   event.preventDefault();
+  loaderEl.classList.remove('hidden');
+  loaderBtn.classList.add('hidden');
 
   const searchedValue = searchFormBtn.elements.user_query.value.trim();
+
   if (searchedValue === '') {
     iziToast.show({
       message: 'Please enter something to search',
@@ -22,6 +30,10 @@ const onSearchFormSubmit = event => {
       position: 'topRight',
       maxWidth: 432,
     });
+
+    loaderEl.classList.add('hidden');
+    searchFormBtn.reset();
+    galleryEl.innerHTML = '';
     return;
   }
 
@@ -41,15 +53,16 @@ const onSearchFormSubmit = event => {
         });
 
         galleryEl.innerHTML = '';
+        loaderEl.classList.add('hidden');
+        loaderBtn.classList.add('hidden');
         searchFormBtn.reset();
-
         return;
       }
+
       const lightbox = new SimpleLightbox('.gallery a', {
         captionsData: 'alt',
         captionDelay: 250,
-        overlayOpacity: 0.9,
-        className: 'modal-container',
+        overlayOpacity: 0.7,
       });
 
       const galleryCardsTemplate = data.hits
@@ -57,7 +70,11 @@ const onSearchFormSubmit = event => {
         .join('');
 
       galleryEl.innerHTML = galleryCardsTemplate;
+
       lightbox.refresh();
+      loaderEl.classList.add('hidden');
+      loaderBtn.classList.remove('hidden');
+      searchFormBtn.reset();
     })
     .catch(err => {
       console.log(err);
@@ -65,10 +82,3 @@ const onSearchFormSubmit = event => {
 };
 
 searchFormBtn.addEventListener('submit', onSearchFormSubmit);
-
-new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionDelay: 250,
-  overlayOpacity: 0.9,
-  className: 'modal-container',
-});

@@ -5,7 +5,9 @@ export const fetchPhotos = searchedQuery => {
   const urlParams = new URLSearchParams({
     q: searchedQuery,
     image_type: 'photo',
-    orientation: 'portrait',
+    orientation: 'horizontal',
+    per_page: 15,
+    page: 1,
     safesearch: true,
   });
 
