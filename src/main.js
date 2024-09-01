@@ -10,6 +10,12 @@ const galleryEl = document.querySelector('.js-gallery');
 const loaderEl = document.querySelector('.loader-box');
 const loaderBtn = document.querySelector('.loader-btn');
 
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  overlayOpacity: 0.7,
+});
+
 loaderEl.classList.add('hidden');
 loaderBtn.classList.add('hidden');
 
@@ -59,12 +65,6 @@ const onSearchFormSubmit = event => {
         return;
       }
 
-      const lightbox = new SimpleLightbox('.gallery a', {
-        captionsData: 'alt',
-        captionDelay: 250,
-        overlayOpacity: 0.7,
-      });
-
       const galleryCardsTemplate = data.hits
         .map(imgDetails => createGalleryCardTemplate(imgDetails))
         .join('');
@@ -77,7 +77,16 @@ const onSearchFormSubmit = event => {
       searchFormBtn.reset();
     })
     .catch(err => {
-      console.log(err);
+      iziToast.error({
+        message: err.stack,
+        messageColor: '#fafafb',
+        messageSize: '16px',
+        messageLineHeight: '150%',
+        backgroundColor: '#ef4040',
+        position: 'topRight',
+        maxWidth: 432,
+      });
+      console.dir(err);
     });
 };
 
